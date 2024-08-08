@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "react-native-crash-course-jsmastery",
-    "slug": "react-native-crash-course-jsmastery",
+    "name": "Aora",
+    "slug": "aora",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "Aora",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
