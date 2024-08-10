@@ -13,7 +13,6 @@ import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 
 export default {
-  play,
   bookmark,
   home,
   plus,
@@ -26,4 +25,5 @@ export default {
   logout,
   eyeHide,
   eye,
-};
+  play,
+}
