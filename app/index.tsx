@@ -1,16 +1,48 @@
+import { useEffect, useState } from "react";
+
 import { StatusBar } from "expo-status-bar";
 import { Redirect, router } from "expo-router";
-import { View, Text, Image, ScrollView } from "react-native";
+
+import { View, Text, Image, ScrollView, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { images } from "../constants";
 import { CustomButton } from "../components/CustomButton";
+import { useAuthStore } from "@/store/useAuthStore";
 
-const Welcome = () => {
+const App = () => {
+  const { loggedIn, verifySession, loading } = useAuthStore();
+  const [isSessionChecked, setIsSessionChecked] = useState(false);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      await verifySession(); // Attempt to verify the session
+      setIsSessionChecked(true); // Mark session check as complete
+    };
+
+    checkSession();
+  }, []);
+
+  if (loading) {
+    return (
+      <SafeAreaView className="bg-primary h-full flex justify-center items-center">
+        <ActivityIndicator size="large" color="#fff" />
+        <Text className="text-white mt-4 text-lg">Loading...</Text>
+        <Image
+          source={images.logo}
+          className="w-[100px] h-[64px] mt-4"
+          resizeMode="contain"
+        />
+      </SafeAreaView>
+    );
+  }
+
+  if (loggedIn && isSessionChecked) {
+    return <Redirect href="/home" />; // Redirect to home if logged in and session is checked
+  }
 
   return (
     <SafeAreaView className="bg-primary h-full">
-        {/* ScrollView -> so that content can be scrolled if the content is too big for other mobile screens */}
       <ScrollView
         contentContainerStyle={{
           height: "100%",
@@ -49,7 +81,7 @@ const Welcome = () => {
           </Text>
 
           <CustomButton
-            title="Continue with Email"
+            title="Login with Email"
             handlePress={() => router.push("/sign-in")}
             containerStyles="w-full mt-7"
           />
@@ -61,4 +93,4 @@ const Welcome = () => {
   );
 };
 
-export default Welcome;
+export default App;

@@ -6,7 +6,7 @@ import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
 import { images } from "../../constants";
 import { CustomButton } from "../../components/CustomButton";
 import { FormField } from "../../components/FormField";
-import { signIn } from "@/lib/authAppwrite";
+import { useAuthStore } from "@/store/useAuthStore";
 
 interface FormFields {
     email: string;
@@ -22,21 +22,26 @@ const SignIn = () => {
 
     const submit = async () => {
       if (!form.email || !form.password) {
-        Alert.alert("Error", "Please fill in all the fields");
+          Alert.alert("Error", "Please fill in all the fields");
+          return;
       }
+
+      const loginAccount = useAuthStore((state) => state.login);
 
       SetSubmitting(true);
 
       try {
-        const result = await signIn(form);
+          const result = await loginAccount(form.email, form.password);
 
-        if (result) {
-          router.push("/home");
-        }
+          if (result.success) {
+              router.push("/home");
+          } else if (result.error) {
+              Alert.alert("Error", result.error.message);
+          }
       } catch (error: any) {
-        Alert.alert("Error", error?.message);
+          Alert.alert("Error", error?.message);
       } finally {
-        SetSubmitting(false);
+          SetSubmitting(false);
       }
     };
 

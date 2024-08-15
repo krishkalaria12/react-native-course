@@ -1,4 +1,4 @@
-import { ID } from "react-native-appwrite";
+import { ID, Query } from "react-native-appwrite";
 import { account, avatars, databases } from "./appwrite";
 import { appwriteConfig } from "./appwriteConfig";
 
@@ -56,5 +56,35 @@ export const signIn = async ({email, password}: AccountLogin) => {
     } catch (error: any) {
         console.log("Error logging in", error);
         throw new Error(error);
+    }
+}
+
+export const getAccount = async () => {
+    try {
+        const currentAccount = await account.get();
+    
+        return currentAccount;
+    } catch (error: any) {
+        throw new Error("Error getting account", error);
+    }
+}
+
+export const getCurrentUser = async () => {
+    try {
+        const currentAccount = await getAccount();
+        if (!currentAccount) throw Error;
+    
+        const currentUser = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.equal("accountId", currentAccount.$id)]
+        );
+    
+        if (!currentUser) throw Error;
+    
+        return currentUser.documents[0];
+    } catch (error: any) {
+        console.log("Error getting current user", error);
+        return null;
     }
 }
