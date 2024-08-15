@@ -142,7 +142,7 @@ export const usePostStore = create<IPostStore>()(
           const posts = await databases.listDocuments(
             appwriteConfig.databaseId,
             appwriteConfig.videosCollectionId,
-            [Query.search("title", query)]
+            [Query.search("title", query), Query.search("prompt", query)]
           );
 
           if (!posts) throw new Error("Something went wrong");
