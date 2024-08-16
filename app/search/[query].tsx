@@ -22,7 +22,7 @@ interface PostItem extends Models.Document {
 
 const Search = () => {
   const { query } = useLocalSearchParams<{ query: string }>();
-  const { searchPosts, error, posts, loading } = usePostStore(); 
+  const { searchPosts, error, searchResults, loading } = usePostStore(); 
 
   useEffect(() => {
     querySearch(query);
@@ -53,7 +53,7 @@ const Search = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <FlatList
-        data={posts as PostItem[]}
+        data={searchResults as PostItem[]}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
           <VideoCard

@@ -81,8 +81,8 @@ export const usePostStore = create<IPostStore>()(
         try {
           const posts = await databases.listDocuments(
             appwriteConfig.databaseId,
-            appwriteConfig.videosCollectionId,
-            [Query.equal("creator", userId)]
+            appwriteConfig.userCollectionId,
+            [Query.equal("accountId", userId)]
           );
 
           const mappedUserPosts = posts.documents.map((post: Models.Document) => ({
